@@ -2,6 +2,11 @@
 {% block body %}
 <main class="container inner-main">
   <header class="page-heading"><p class="eyebrow">{{ site.name }} / 归档</p><h1>{{ site.archiveTitle }}</h1><p>{{ site.archiveIntro }}</p></header>
+  <section class="archive-stats" aria-label="博客统计">
+    <div><strong>{{ stats.articles }}</strong><span>已发布文章</span></div>
+    <div><strong>{{ stats.novel_chapters }}</strong><span>小说篇章</span></div>
+    <div><strong class="stats-pending">—</strong><span>访客量 · 暂未接入统计</span></div>
+  </section>
   <section class="archive-section">
     <div class="journal-tools">
       <div class="filter-group" aria-label="按分类筛选文章"><button type="button" class="filter-chip active" data-filter="全部文章" aria-pressed="true">全部</button>{% for c in categories %}<button type="button" class="filter-chip" data-filter="{{ c }}" aria-pressed="false">{{ c }}</button>{% endfor %}</div>
@@ -9,7 +14,7 @@
     </div>
     <div class="archive-list" id="posts-grid">
       {% for p in posts %}
-      <article class="archive-row" data-category="{{ p.category }}" data-search="{{ p.searchText }}"><a href="{{ p.url }}" class="archive-row-link"><time class="archive-date" datetime="{{ p.date }}">{{ p.displayDate }}</time><span class="archive-copy"><small>{{ p.category }} · {{ p.minutes }} 分钟阅读</small><strong>{{ p.title }}</strong><span>{{ p.excerpt }}</span></span><span class="archive-arrow" aria-hidden="true">↗</span></a></article>
+      <article class="archive-row" data-category="{{ p.category }}" data-search="{{ p.searchText }}"><a href="{{ p.url }}" class="archive-row-link"><time class="archive-date" datetime="{{ p.date }}">{{ p.displayDate }}</time><span class="archive-copy"><small>{{ p.category }} · {{ p.characterCount }} 字</small><strong>{{ p.title }}</strong><span>{{ p.excerpt }}</span></span><span class="archive-arrow" aria-hidden="true">↗</span></a></article>
       {% endfor %}
     </div>
     <p class="no-results" id="no-results" hidden>没有找到符合条件的文章。</p>

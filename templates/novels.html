@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block body %}
+<main class="container inner-main">
+  <header class="page-heading">
+    <p class="eyebrow">{{ site.name }} / 小说</p>
+    <h1>小说目录</h1>
+    <p>让故事有一个安静的地方，慢慢写下去。</p>
+  </header>
+  <section class="novels-list" aria-label="连载小说目录">
+    {% for work in novels %}
+    <section class="novel-work">
+      <div class="novel-work-head"><h2>{{ work.title }}</h2><span class="novel-work-count">{{ work.count }} 章</span></div>
+      <ol class="novel-chapter-list">
+        {% for ch in work.chapters %}
+        <li><a href="{{ ch.url }}"><span class="novel-chapter-no">{% if ch.chapter is not none %}{{ '%02d' | format(ch.chapter) }}{% else %}·{% endif %}</span><span class="novel-chapter-title">{{ ch.title }}</span><span class="novel-chapter-arrow" aria-hidden="true">↗</span></a></li>
+        {% endfor %}
+      </ol>
+    </section>
+    {% endfor %}
+    {% if not novels %}<p class="novel-empty">连载的篇章尚未开始。填写作品名称和章节序号后，目录会自动出现。</p>{% endif %}
+    {% if shorts %}
+    <section class="novel-work"><h2>独立故事</h2><ol class="novel-chapter-list">
+      {% for ch in shorts %}
+      <li><a href="{{ ch.url }}"><span class="novel-chapter-no">·</span><span class="novel-chapter-title">{{ ch.title }}</span><span class="novel-chapter-arrow" aria-hidden="true">↗</span></a></li>
+      {% endfor %}
+    </ol></section>
+    {% endif %}
+  </section>
+</main>
+{% endblock %}

@@ -40,3 +40,27 @@
  .category-caption{padding-top:11px;font-size:16px}
 }
 @media(prefers-reduced-motion:reduce){.category-art img,.category-caption>span:last-child{transition:none!important}}
+
+/* 小说目录：按作品收纳连载，保持纸本文集式留白 */
+.novel-home-entrance{margin:27px 0 0;text-align:right;font-size:12px;color:var(--muted)}
+.novel-home-entrance a{border-bottom:1px solid var(--line);padding-bottom:6px}
+.novel-home-entrance a:hover{color:var(--ink);border-color:var(--ink)}
+.novels-list{border-top:1px solid var(--ink)}
+.novel-work{padding:44px 0 49px;border-bottom:1px solid var(--line)}
+.novel-work-head{display:flex;align-items:baseline;justify-content:space-between;gap:15px}
+.novel-work h2{font:400 31px/1.5 var(--serif);margin:0}
+.novel-work-count{font-size:12px;color:var(--muted)}
+.novel-chapter-list{list-style:none;margin:25px 0 0;padding:0}
+.novel-chapter-list li a{display:flex;gap:24px;align-items:baseline;border-bottom:1px solid var(--line);padding:15px 0}
+.novel-chapter-list li:last-child a{border:0}
+.novel-chapter-no{min-width:60px;color:var(--muted);font-size:11px}
+.novel-chapter-title{font:400 17px/1.6 var(--serif);flex:1}
+.novel-chapter-list li a:hover .novel-chapter-title{color:var(--accent)}
+.novel-chapter-arrow{color:var(--muted)}
+.novel-empty{padding:24px 0;color:var(--muted);line-height:2}
+.chapter-pagination{display:flex;justify-content:space-between;gap:24px;border-top:1px solid var(--line);padding-top:30px;margin-top:40px}
+.chapter-pagination>a{display:flex;flex-direction:column;gap:10px;font-size:12px;flex:1}
+.chapter-pagination>a:last-child{text-align:right}
+.chapter-pagination a span{font:15px/1.6 var(--serif);color:var(--muted)}
+.chapter-pagination a:hover{color:var(--accent)}
+@media(max-width:760px){.novel-work{padding:29px 0 36px}.novel-work h2{font-size:25px}.novel-chapter-title{font-size:16px}.novel-chapter-list li a{gap:12px}.novel-chapter-no{min-width:48px}.chapter-pagination{gap:16px}}

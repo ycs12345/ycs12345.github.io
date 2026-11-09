@@ -2,7 +2,7 @@
 {% block body %}
 <main class="article-page container">
   <header class="article-header">
-    <div class="crumbs"><a href="../index.html">首页</a><span>/</span><a href="../archive.html">所有文章</a></div>
+    <div class="crumbs"><a href="../index.html">首页</a><span>/</span>{% if post.series %}<a href="../novels.html">小说目录</a><span>/</span><span>{{ post.series }}</span>{% else %}<a href="../archive.html">所有文章</a>{% endif %}</div>
     <div class="article-kicker"><span>{{ post.category }}</span><span class="meta-sep">/</span><time datetime="{{ post.date }}">{{ post.displayDate }}</time></div>
     <h1>{{ post.title }}</h1>
     {% if post.excerpt %}<p class="article-deck">{{ post.excerpt }}</p>{% endif %}
@@ -12,10 +12,17 @@
   <div class="article-layout">
     <article class="article-content">{{ post.content | safe }}
       <div class="article-tags">{% for t in post.tags %}<span># {{ t }}</span>{% endfor %}</div>
-      <div class="article-after"><span>— 完 —</span><a href="../archive.html">返回文章目录 ↗</a></div>
+      <div class="article-after"><span>— 完 —</span><a href="{% if post.series %}../novels.html{% else %}../archive.html{% endif %}">返回{% if post.series %}小说{% else %}文章{% endif %}目录 ↗</a></div>
     </article>
     {% if post.headings %}<aside class="toc"><span>目录</span><nav aria-label="文章目录">{% for h in post.headings %}<a href="#{{ h.id }}">{{ h.title }}</a>{% endfor %}</nav></aside>{% endif %}
   </div>
+  {% if post.series %}
+  <nav class="chapter-pagination" aria-label="小说章节导航">
+    {% if novel_nav and novel_nav.previous %}<a href="../{{ novel_nav.previous.url }}">← 上一章<span>{{ novel_nav.previous.title }}</span></a>{% else %}<span></span>{% endif %}
+    {% if novel_nav and novel_nav.next %}<a href="../{{ novel_nav.next.url }}">下一章 →<span>{{ novel_nav.next.title }}</span></a>{% else %}<a href="../novels.html">返回小说目录 →</a>{% endif %}
+  </nav>
+  {% else %}
   <section class="next-read"><div><span>继续阅读</span>{% if next_post %}<a href="../{{ next_post.url }}">{{ next_post.title }} ↗</a>{% else %}<a href="../archive.html">看看其他文章 ↗</a>{% endif %}</div></section>
+  {% endif %>
 </main>
 {% endblock %}

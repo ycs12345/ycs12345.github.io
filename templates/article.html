@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% block body %}
-<main class="article-page container">
+<main class="article-page container{% if post.category == '小说创作' %} novel-reading{% endif %}">
   <header class="article-header">
     <div class="crumbs"><a href="../index.html">首页</a><span>/</span>{% if post.series %}<a href="../novels.html">小说目录</a><span>/</span><span>{{ post.series }}</span>{% else %}<a href="../archive.html">所有文章</a>{% endif %}</div>
     <div class="article-kicker"><span>{{ post.category }}</span><span class="meta-sep">/</span><time datetime="{{ post.date }}">{{ post.displayDate }}</time></div>
     <h1>{{ post.title }}</h1>
     {% if post.excerpt %}<p class="article-deck">{{ post.excerpt }}</p>{% endif %}
-    <div class="article-byline"><img src="../assets/avatar.webp" alt="{{ site.author }}头像" width="36" height="36"><span>{{ site.author }} <span class="meta-sep">·</span> {{ post.minutes }} 分钟阅读</span><button class="share-post" type="button" id="share-post">分享 ↗</button></div>
+    <div class="article-byline"><img src="../assets/avatar.webp" alt="{{ site.author }}头像" width="36" height="36"><span>{{ site.author }} <span class="meta-sep">·</span> {{ post.characterCount }} 字</span><button class="share-post" type="button" id="share-post">分享 ↗</button></div>
   </header>
   {% if post.cover %}<figure class="article-cover"><img src="{{ post.cover_for_page }}" alt="{{ post.title }} 封面"></figure>{% endif %}
   <div class="article-layout">

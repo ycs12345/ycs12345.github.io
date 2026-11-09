@@ -23,6 +23,6 @@
   </nav>
   {% else %}
   <section class="next-read"><div><span>继续阅读</span>{% if next_post %}<a href="../{{ next_post.url }}">{{ next_post.title }} ↗</a>{% else %}<a href="../archive.html">看看其他文章 ↗</a>{% endif %}</div></section>
-  {% endif %>
+  {% endif %}
 </main>
 {% endblock %}

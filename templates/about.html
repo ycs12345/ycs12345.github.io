@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block body %}
+<main class="container inner-main">
+  <header class="page-heading"><p class="eyebrow">{{ site.name }} / 关于</p><h1>{{ site.aboutPageTitle }}</h1></header>
+  <section class="about-section">
+    <div class="about-photo-frame"><img src="assets/avatar.webp" alt="{{ site.author }}的卡通头像" width="640" height="640"></div>
+    <div class="about-copy">
+      <h2>{{ site.aboutTitle }}</h2>
+      <p class="about-lead">{{ site.aboutText }}</p>
+      <p>{{ site.aboutMore }}</p>
+      <div class="about-categories"><h3>写些什么</h3><div>{% for cat in categories %}<a href="archive.html">{{ cat }} <span aria-hidden="true">↗</span></a>{% endfor %}</div></div>
+    </div>
+  </section>
+</main>
+{% endblock %}

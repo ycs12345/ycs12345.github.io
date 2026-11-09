@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block body %}
+<main>
+  <section class="hero container">
+    <p class="eyebrow">{{ site.author }} · 个人博客</p>
+    <div class="hero-inner">
+      <div>
+        <h1>{{ site.name }}</h1>
+        <p class="hero-bio">{{ site.bio }}</p>
+        {% if site.intro %}<p class="hero-intro">{{ site.intro }}</p>{% endif %}
+        <a class="quiet-link" href="archive.html">阅读文章 <span aria-hidden="true">↗</span></a>
+      </div>
+      <img class="hero-avatar" src="assets/avatar.webp" alt="{{ site.author }}的插画头像" width="176" height="176">
+    </div>
+  </section>
+
+
+  <section class="container category-section" aria-labelledby="categories-heading">
+    <div class="category-section-header">
+      <h2 id="categories-heading">分类</h2>
+      <span>随笔 · 阅读 · 故事</span>
+    </div>
+    <div class="category-gallery">
+      <button class="category-painting" type="button" data-filter="生活随笔" aria-pressed="false" aria-label="筛选生活随笔文章">
+        <span class="category-art"><img src="assets/category-mei.webp" alt="宣纸背景上的白梅花水墨画" width="1672" height="941" loading="lazy"></span>
+        <span class="category-caption"><span>生活随笔</span><span aria-hidden="true">↗</span></span>
+      </button>
+      <button class="category-painting" type="button" data-filter="读书笔记" aria-pressed="false" aria-label="筛选读书笔记文章">
+        <span class="category-art"><img src="assets/category-lan.webp" alt="宣纸背景上的幽兰水墨画" width="1675" height="939" loading="lazy"></span>
+        <span class="category-caption"><span>读书笔记</span><span aria-hidden="true">↗</span></span>
+      </button>
+      <button class="category-painting" type="button" data-filter="小说创作" aria-pressed="false" aria-label="筛选小说创作文章">
+        <span class="category-art"><img src="assets/category-zhu.webp" alt="宣纸背景上的绿竹水墨画" width="1672" height="941" loading="lazy"></span>
+        <span class="category-caption"><span>小说创作</span><span aria-hidden="true">↗</span></span>
+      </button>
+    </div>
+  </section>
+
+  <section class="container journal" id="journal">
+    <div class="section-head">
+      <h2>{{ site.homeHeading }}</h2>
+      <span class="section-counter">{{ posts|length }} 篇</span>
+    </div>
+    <div class="journal-tools">
+      <div class="filter-group" aria-label="按分类筛选文章">
+        <button class="filter-chip active" type="button" data-filter="全部文章" aria-pressed="true">全部</button>
+        {% for c in categories %}<button class="filter-chip" type="button" data-filter="{{ c }}" aria-pressed="false">{{ c }}</button>{% endfor %}
+      </div>
+      <label class="search-wrapper"><span class="sr-only">搜索文章</span><input class="post-search" type="search" autocomplete="off" placeholder="搜索文章" maxlength="80"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10.8" cy="10.8" r="6.4"/><path d="m16 16 5 5"/></svg></label>
+    </div>
+    <div class="entry-list" id="posts-grid">
+      {% for p in posts %}
+      <article class="entry-card" data-category="{{ p.category }}" data-search="{{ p.searchText }}">
+        <a class="entry-main" href="{{ p.url }}">
+          <span class="post-meta"><span class="post-category">{{ p.category }}</span><span class="meta-sep">/</span><time datetime="{{ p.date }}">{{ p.displayDate }}</time></span>
+          <h3>{{ p.title }}</h3>
+          <p>{{ p.excerpt }}</p>
+          <span class="entry-arrow" aria-hidden="true">↗</span>
+        </a>
+        {% if p.cover %}<a href="{{ p.url }}" class="entry-cover"><img src="{{ p.cover_for_page }}" alt="{{ p.title }}封面" loading="lazy"></a>{% endif %}
+      </article>
+      {% endfor %}
+    </div>
+    <p class="no-results" id="no-results" hidden>没有找到符合条件的文章。</p>
+    {% if not posts %}<p class="empty-notice">第一篇文章，会从这里开始。</p>{% endif %}
+    <div class="browse-more"><a class="quiet-link" href="archive.html">查看全部文章 <span aria-hidden="true">↗</span></a></div>
+  </section>
+</main>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block body %}
+<main class="article-page container">
+  <header class="article-header">
+    <div class="crumbs"><a href="../index.html">首页</a><span>/</span><a href="../archive.html">所有文章</a></div>
+    <div class="article-kicker"><span>{{ post.category }}</span><span class="meta-sep">/</span><time datetime="{{ post.date }}">{{ post.displayDate }}</time></div>
+    <h1>{{ post.title }}</h1>
+    {% if post.excerpt %}<p class="article-deck">{{ post.excerpt }}</p>{% endif %}
+    <div class="article-byline"><img src="../assets/avatar.webp" alt="{{ site.author }}头像" width="36" height="36"><span>{{ site.author }} <span class="meta-sep">·</span> {{ post.minutes }} 分钟阅读</span><button class="share-post" type="button" id="share-post">分享 ↗</button></div>
+  </header>
+  {% if post.cover %}<figure class="article-cover"><img src="{{ post.cover_for_page }}" alt="{{ post.title }} 封面"></figure>{% endif %}
+  <div class="article-layout">
+    <article class="article-content">{{ post.content | safe }}
+      <div class="article-tags">{% for t in post.tags %}<span># {{ t }}</span>{% endfor %}</div>
+      <div class="article-after"><span>— 完 —</span><a href="../archive.html">返回文章目录 ↗</a></div>
+    </article>
+    {% if post.headings %}<aside class="toc"><span>目录</span><nav aria-label="文章目录">{% for h in post.headings %}<a href="#{{ h.id }}">{{ h.title }}</a>{% endfor %}</nav></aside>{% endif %}
+  </div>
+  <section class="next-read"><div><span>继续阅读</span>{% if next_post %}<a href="../{{ next_post.url }}">{{ next_post.title }} ↗</a>{% else %}<a href="../archive.html">看看其他文章 ↗</a>{% endif %}</div></section>
+</main>
+{% endblock %}

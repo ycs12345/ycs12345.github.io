@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block body %}
+<main class="container inner-main">
+  <header class="page-heading"><p class="eyebrow">{{ site.name }} / 归档</p><h1>{{ site.archiveTitle }}</h1><p>{{ site.archiveIntro }}</p></header>
+  <section class="archive-section">
+    <div class="journal-tools">
+      <div class="filter-group" aria-label="按分类筛选文章"><button type="button" class="filter-chip active" data-filter="全部文章" aria-pressed="true">全部</button>{% for c in categories %}<button type="button" class="filter-chip" data-filter="{{ c }}" aria-pressed="false">{{ c }}</button>{% endfor %}</div>
+      <label class="search-wrapper"><span class="sr-only">搜索文章</span><input class="post-search" type="search" placeholder="搜索文章" maxlength="80"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10.8" cy="10.8" r="6.4"/><path d="m16 16 5 5"/></svg></label>
+    </div>
+    <div class="archive-list" id="posts-grid">
+      {% for p in posts %}
+      <article class="archive-row" data-category="{{ p.category }}" data-search="{{ p.searchText }}"><a href="{{ p.url }}" class="archive-row-link"><time class="archive-date" datetime="{{ p.date }}">{{ p.displayDate }}</time><span class="archive-copy"><small>{{ p.category }} · {{ p.minutes }} 分钟阅读</small><strong>{{ p.title }}</strong><span>{{ p.excerpt }}</span></span><span class="archive-arrow" aria-hidden="true">↗</span></a></article>
+      {% endfor %}
+    </div>
+    <p class="no-results" id="no-results" hidden>没有找到符合条件的文章。</p>
+  </section>
+</main>
+{% endblock %}

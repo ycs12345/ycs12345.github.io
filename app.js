@@ -60,3 +60,16 @@
    catch(_){notify('可以从地址栏复制文章链接')}
  });
 })();
+
+/* GoatCounter 的公开 TOTAL 计数接口；未启用公开计数时保留 “—”。 */
+(function () {
+  const elements=document.querySelectorAll('[data-goatcounter-total]');
+  if (!elements.length) return;
+  const code=document.documentElement.getAttribute('data-goatcounter-code')||'';
+  if (!/^[a-z0-9-]+$/i.test(code)) return;
+  fetch('https://'+code+'.goatcounter.com/counter/TOTAL.json', {mode:'cors'})
+    .then(function(response){if(!response.ok) throw new Error('Counter not available');return response.json();})
+    .then(function(result){if(typeof result.count!=='string' && typeof result.count!=='number')return;
+      elements.forEach(function(element){element.textContent=String(result.count);});})
+    .catch(function(){/* 未开放公开计数或网络受限时显示 “—”，绝不伪造数字。 */});
+})();

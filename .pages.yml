@@ -116,6 +116,10 @@ content:
       - name: footerLine
         label: 页脚短句
         type: text
+      - name: goatcounterCode
+        label: GoatCounter 统计站点名（选填）
+        type: string
+        description: 注册 GoatCounter 后填写站点前缀，例如 liubai-notes；先到 GoatCounter 设置中开启公开访次计数。
       - name: siteUrl
         label: 博客公开网址（上线后选填）
         type: string

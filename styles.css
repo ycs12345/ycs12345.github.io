@@ -75,3 +75,6 @@
 .novel-reading .article-content>p{text-indent:2em;margin:0 0 .65em}
 .novel-reading .article-content>blockquote p{text-indent:0}
 @media(max-width:760px){.archive-stats{gap:16px;padding:23px 0;margin-bottom:32px}.archive-stats strong{font-size:27px}.archive-stats span{font-size:10px}}
+
+/* Two-column publication stats, without public visit count */
+.archive-stats-two{grid-template-columns:repeat(2,minmax(0,1fr))}

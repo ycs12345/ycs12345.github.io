@@ -47,9 +47,9 @@ content:
         type: number
         description: 第一章填写 1、第二章填写 2，系统会自动排序。
       - name: excerpt
-        label: 文章摘要
+        label: 文章摘要（选填）
         type: text
-        required: true
+        required: false
         description: 简短写一两句话，将显示在首页卡片上。
       - name: cover
         label: 文章封面图（可选）

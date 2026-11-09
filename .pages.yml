@@ -37,7 +37,7 @@ content:
         type: select
         required: true
         options:
-          values: [生活随笔, 读书笔记, 小说创作]
+          values: [生活随笔, 读书笔记, 小说创作, 诗词创作]
       - name: series
         label: 所属小说名称（连载时填写）
         type: string

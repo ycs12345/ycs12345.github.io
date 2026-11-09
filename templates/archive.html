@@ -2,10 +2,9 @@
 {% block body %}
 <main class="container inner-main">
   <header class="page-heading"><p class="eyebrow">{{ site.name }} / 归档</p><h1>{{ site.archiveTitle }}</h1><p>{{ site.archiveIntro }}</p></header>
-  <section class="archive-stats" aria-label="博客统计">
+  <section class="archive-stats archive-stats-two" aria-label="博客统计">
     <div><strong>{{ stats.articles }}</strong><span>已发布文章</span></div>
     <div><strong>{{ stats.novel_chapters }}</strong><span>小说篇章</span></div>
-    <div><strong class="stats-pending" data-goatcounter-total>—</strong><span>累计访问次数</span></div>
   </section>
   <section class="archive-section">
     <div class="journal-tools">

@@ -41,6 +41,9 @@ def parse_post(file:Path)->dict:
     slug=re.sub(r'[^a-zA-Z0-9\u4e00-\u9fff-]+','-',file.stem).strip('-').lower()
     # 对正文 HTML 做白名单过滤，避免脚本代码进入公开网页。
     body=bleach.clean(md(fm.group(2)),tags=ALLOWED_TAGS,attributes=ALLOWED_ATTRS,strip=True,protocols={'http','https','mailto'})
+    # 统一消除从 Word 粘贴产生的段首全角空格，具体缩进由阅读页 CSS 控制。
+    if data['category']=='小说创作':
+        body=re.sub(r'(<p>)(?:[\u0020\u3000]|&nbsp;|&#160;)+',r'\1',body)
     headings=[]
     def add_anchor(m):
         title=html.unescape(re.sub(r'<[^>]*>', '', m.group(2)))
@@ -53,7 +56,8 @@ def parse_post(file:Path)->dict:
     else: tags=[str(t) for t in tags if str(t).strip()]
     displayDate=date.replace('-','.')
     text=re.sub(r'<[^>]+>', '', body)
-    minutes=max(1, round(len(text)/360))
+    # 正文实数统计（排除 HTML 标记和空白字符），不再展示未经验证的阅读时长。
+    character_count=len(re.sub(r'\s+', '',html.unescape(text)))
     scene,glyph=SCENES[data['category']]
     series=str(data.get('series') or '').strip() if data['category']=='小说创作' else ''
     raw_chapter=data.get('chapter')
@@ -66,7 +70,7 @@ def parse_post(file:Path)->dict:
         'excerpt':str(data.get('excerpt') or '').strip(),
         'cover':str(data.get('cover') or '').strip(),
         'featured':bool(data.get('featured',False)),
-        'tags':tags,'minutes':minutes,'scene':scene,'glyph':glyph,
+        'tags':tags,'characterCount':character_count,'scene':scene,'glyph':glyph,
         'content_raw':body,'headings':headings,
     }
     result['searchText']=' '.join([result['title'],result['excerpt'],result['category'], ' '.join(tags)]).lower()
@@ -102,6 +106,7 @@ def build(dest:Path)->None:
     novels=[{'title':title,'chapters':chapters,'count':len(chapters),'latest':max(p['date'] for p in chapters)} for title,chapters in novel_groups.items()]
     novels.sort(key=lambda w:w['latest'],reverse=True)
     shorts=[p for p in posts if p['category']=='小说创作' and not p['series']]
+    stats={'articles':len(posts),'novel_chapters':sum(1 for p in posts if p['category']=='小说创作'),'novel_works':len(novels)}
     novel_nav={}
     for work in novels:
         chapters=work['chapters']
@@ -131,7 +136,7 @@ def build(dest:Path)->None:
         og_image=site_url+'/assets/avatar.webp' if site_url else None
         context={'site':site,'page':page,'title':title,'description':description,'root':root,'year':now,
                  'posts':all_posts,'categories':CATS,'featured':feat,
-                 'novels':novels,'shorts':shorts,
+                 'novels':novels,'shorts':shorts,'stats':stats,
                  'post':cvt(post) if post else None,'canonical':canonical,'og_image':og_image}
         if additional:context.update(additional)
         target=dest/name

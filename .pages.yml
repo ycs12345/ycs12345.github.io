@@ -38,6 +38,14 @@ content:
         required: true
         options:
           values: [生活随笔, 读书笔记, 小说创作]
+      - name: series
+        label: 所属小说名称（连载时填写）
+        type: string
+        description: 例如：未完成的人。仅小说创作文章填写；同名章节自动归为同一作品。
+      - name: chapter
+        label: 章节序号（连载时填写）
+        type: number
+        description: 第一章填写 1、第二章填写 2，系统会自动排序。
       - name: excerpt
         label: 文章摘要
         type: text

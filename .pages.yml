@@ -1,0 +1,114 @@
+# Pages CMS: https://app.pagescms.org
+# 添加 GitHub 仓库后，文章和图片将在 Pages CMS 中可视化管理。
+media:
+  - name: article_images
+    label: 文章图片库
+    input: media/images
+    output: /media/images
+    categories: [image]
+    extensions: [jpg, jpeg, png, webp, gif]
+    rename: safe
+
+content:
+  - name: posts
+    label: 文章管理
+    type: collection
+    path: content/posts
+    format: yaml-frontmatter
+    filename: "post-{year}-{month}-{day}-{hour}-{minute}-{second}.md"
+    view:
+      primary: title
+      fields: [title, category, date, draft, featured]
+      sort: date
+      order: desc
+    fields:
+      - name: title
+        label: 文章标题
+        type: string
+        required: true
+      - name: date
+        label: 发布日期
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: category
+        label: 文章分类
+        type: select
+        required: true
+        options:
+          values: [生活随笔, 读书笔记, 小说创作]
+      - name: excerpt
+        label: 文章摘要
+        type: text
+        required: true
+        description: 简短写一两句话，将显示在首页卡片上。
+      - name: cover
+        label: 文章封面图（可选）
+        type: image
+        options:
+          media: article_images
+      - name: draft
+        label: 保存为草稿（不公开显示）
+        type: boolean
+        default: false
+      - name: tags
+        label: 标签（可选）
+        type: string
+        description: 多个标签请用中文逗号分隔，例如：阅读，感悟
+      - name: body
+        label: 正文（可插入图片、引用、标题和列表）
+        type: rich-text
+        required: true
+        options:
+          format: markdown
+          media: article_images
+          rename: safe
+          switcher: true
+
+  - name: profile
+    label: 博客资料
+    type: file
+    path: data/site.yml
+    format: yaml
+    fields:
+      - name: name
+        label: 博客名称
+        type: string
+      - name: author
+        label: 作者昵称
+        type: string
+      - name: bio
+        label: 一句话简介
+        type: text
+      - name: intro
+        label: 首页补充介绍
+        type: text
+      - name: homeHeading
+        label: 首页文章区标题
+        type: string
+      - name: archiveTitle
+        label: 归档页标题
+        type: string
+      - name: archiveIntro
+        label: 归档页简介
+        type: text
+      - name: aboutPageTitle
+        label: 关于页主标题
+        type: string
+      - name: aboutTitle
+        label: 关于页作者称呼
+        type: string
+      - name: aboutText
+        label: 关于页第一段
+        type: text
+      - name: aboutMore
+        label: 关于页第二段
+        type: text
+      - name: footerLine
+        label: 页脚短句
+        type: text
+      - name: siteUrl
+        label: 博客公开网址（上线后选填）
+        type: string
+        description: 如 https://你的用户名.github.io

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block body %}
+<main class="container inner-main poetry-index">
+  <header class="page-heading">
+    <p class="eyebrow">{{ site.name }} / 诗词</p>
+    <h1>诗词创作</h1>
+    <p>将心事写成诗，把远方留在词里。</p>
+  </header>
+  <section class="poetry-index-intro">
+    <div class="poetry-index-art" aria-hidden="true"><img src="assets/category-ju.webp" alt="" loading="lazy" width="700" height="393"></div>
+    <div class="poetry-index-note"><span>诗 · 词 · 随感</span><p>不必字字珠玑，但求句句由心。</p></div>
+  </section>
+  <section aria-labelledby="poetry-list-title" class="poetry-list">
+    <div class="section-head"><h2 id="poetry-list-title">诗词集</h2><span class="section-counter">{{ poems|length }} 首</span></div>
+    {% if poems %}
+      {% for poem in poems %}
+      <article class="poetry-entry">
+        <a href="{{ poem.url }}" class="poetry-entry-link">
+          <span class="poetry-entry-meta"><time datetime="{{ poem.date }}">{{ poem.displayDate }}</time></span>
+          <h3>{{ poem.title }}</h3>
+          {% if poem.excerpt %}<p>{{ poem.excerpt }}</p>{% endif %}
+          <span aria-hidden="true" class="poetry-entry-arrow">↗</span>
+        </a>
+      </article>
+      {% endfor %}
+    {% else %}
+      <p class="novel-empty">一页空白，静待第一首诗。</p>
+    {% endif %}
+  </section>
+</main>
+{% endblock %}

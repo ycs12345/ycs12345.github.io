@@ -55,7 +55,12 @@ def parse_post(file:Path)->dict:
     text=re.sub(r'<[^>]+>', '', body)
     minutes=max(1, round(len(text)/360))
     scene,glyph=SCENES[data['category']]
+    series=str(data.get('series') or '').strip() if data['category']=='小说创作' else ''
+    raw_chapter=data.get('chapter')
+    try: chapter=int(raw_chapter) if raw_chapter not in (None,'') else None
+    except (ValueError,TypeError): chapter=None
     result={
+        'series':series,'chapter':chapter,
         'slug':slug,'url':f'posts/{slug}.html','title':str(data['title']),
         'date':date,'displayDate':displayDate,'category':str(data['category']),
         'excerpt':str(data.get('excerpt') or '').strip(),
@@ -88,6 +93,21 @@ def build(dest:Path)->None:
     posts=[p for p in posts if p]
     posts.sort(key=lambda p:(p['date'],p['slug']),reverse=True)
     featured=next((p for p in posts if p['featured']),posts[0] if posts else None)
+    novel_groups={}
+    for post in posts:
+        if post['category']=='小说创作' and post['series']:
+            novel_groups.setdefault(post['series'],[]).append(post)
+    for chapters in novel_groups.values():
+        chapters.sort(key=lambda p:(p['chapter'] if p['chapter'] is not None else 999999,p['date'],p['slug']))
+    novels=[{'title':title,'chapters':chapters,'count':len(chapters),'latest':max(p['date'] for p in chapters)} for title,chapters in novel_groups.items()]
+    novels.sort(key=lambda w:w['latest'],reverse=True)
+    shorts=[p for p in posts if p['category']=='小说创作' and not p['series']]
+    novel_nav={}
+    for work in novels:
+        chapters=work['chapters']
+        for i,p in enumerate(chapters):
+            novel_nav[p['slug']]={'previous':chapters[i-1] if i else None,'next':chapters[i+1] if i+1<len(chapters) else None}
+
     env=jinja2.Environment(loader=jinja2.FileSystemLoader(str(TEMPLATE_DIR)),autoescape=True,trim_blocks=True,lstrip_blocks=True)
     dest.mkdir(parents=True,exist_ok=True)
     for name in ['styles.css','app.js','favicon.svg']:
@@ -111,6 +131,7 @@ def build(dest:Path)->None:
         og_image=site_url+'/assets/avatar.webp' if site_url else None
         context={'site':site,'page':page,'title':title,'description':description,'root':root,'year':now,
                  'posts':all_posts,'categories':CATS,'featured':feat,
+                 'novels':novels,'shorts':shorts,
                  'post':cvt(post) if post else None,'canonical':canonical,'og_image':og_image}
         if additional:context.update(additional)
         target=dest/name
@@ -119,16 +140,17 @@ def build(dest:Path)->None:
     render('index.html','index' if False else 'home',f"{site['name']} · {site['author']} 的个人博客",str(site.get('intro','')))
     render('archive.html','archive',f"所有文章 · {site['name']}",f"{site['author']} 的文字归档")
     render('about.html','about',f"关于作者 · {site['name']}",str(site['bio']))
+    render('novels.html','novels',f"小说目录 · {site['name']}",'在这里，故事按章节慢慢展开。')
     for i,post in enumerate(posts):
         other=posts[(i+1)%len(posts)] if len(posts)>1 else None
-        render(post['url'],'article',f"{post['title']} · {site['name']}",post['excerpt'],root='../',post=post,additional={'next_post':other})
+        render(post['url'],'article',f"{post['title']} · {site['name']}",post['excerpt'],root='../',post=post,additional={'next_post':other,'novel_nav':novel_nav.get(post['slug'])})
     (dest/'.nojekyll').write_text('',encoding='utf-8')
     if site_url:
         from xml.sax.saxutils import escape
         items=''.join(f'<item><title>{escape(p["title"])}</title><link>{escape(site_url+"/"+p["url"])}</link><guid>{escape(site_url+"/"+p["url"])}</guid><description>{escape(p["excerpt"])}</description></item>' for p in posts)
         rss=f'<?xml version="1.0" encoding="utf-8"?><rss version="2.0"><channel><title>{escape(site["name"])}</title><link>{escape(site_url)}</link><description>{escape(site.get("intro",""))}</description>{items}</channel></rss>'
         (dest/'feed.xml').write_text(rss,encoding='utf-8')
-        (dest/'sitemap.xml').write_text('<?xml version="1.0" encoding="utf-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join(f'<url><loc>{escape(site_url+"/"+url)}</loc></url>' for url in ['index.html','about.html','archive.html']+[p['url'] for p in posts])+'</urlset>',encoding='utf-8')
+        (dest/'sitemap.xml').write_text('<?xml version="1.0" encoding="utf-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join(f'<url><loc>{escape(site_url+"/"+url)}</loc></url>' for url in ['index.html','about.html','archive.html','novels.html']+[p['url'] for p in posts])+'</urlset>',encoding='utf-8')
     print(f'✅ 构建完成：{len(posts)} 篇公开文章，{sum(1 for _ in SOURCES.glob("*.md"))-len(posts)} 篇草稿 → {dest}')
 
 if __name__=='__main__':

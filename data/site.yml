@@ -13,4 +13,4 @@ footerLine: 留一些空白，给生活。
 siteUrl: "https://ycs12345.github.io"
 
 # GoatCounter 账号的站点名称；未配置时不会加载统计脚本。
-goatcounterCode: ""
+goatcounterCode: "ycs-notes"
